@@ -14,15 +14,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+
 import {
   SquaresFourIcon,
+  BuildingsIcon,
+  ClipboardTextIcon,
+  UsersThreeIcon,
+  DoorOpenIcon,
+  ReceiptIcon,
+  FileTextIcon,
+  WrenchIcon,
+  WarningCircleIcon,
+  ClipboardIcon,
+  ChartBarIcon,
+  FilePdfIcon,
   UsersIcon,
   GearIcon,
   CommandIcon,
-  BuildingsIcon,
-  UsersThreeIcon,
-  ArrowsLeftRightIcon,
-  ReceiptIcon,
 } from "@phosphor-icons/react"
 
 const data = {
@@ -31,6 +39,7 @@ const data = {
     email: "admin@sirusna.bangka.go.id",
     avatar: "/avatars/shadcn.jpg",
   },
+
   navMain: [
     {
       title: "Dasbor",
@@ -38,29 +47,68 @@ const data = {
       icon: <SquaresFourIcon />,
     },
     {
-      title: "Rusun",
+      title: "Data Rusun",
       url: "/administrasi/rusun",
       icon: <BuildingsIcon />,
     },
     {
-      title: "Transaksi",
+      title: "Pengajuan Rusun",
+      url: "/administrasi/pengajuan",
+      icon: <ClipboardTextIcon />,
+    },
+    {
+      title: "Data Penghuni",
+      url: "/administrasi/penghuni",
+      icon: <UsersThreeIcon />,
+    },
+    {
+      title: "Unit Hunian",
+      url: "/administrasi/unit",
+      icon: <DoorOpenIcon />,
+    },
+    {
+      title: "Tagihan & Transaksi",
       url: "/administrasi/transaksi",
       icon: <ReceiptIcon />,
     },
     {
-      title: "Penghuni",
-      url: "/administrasi/penghuni",
-      icon: <UsersThreeIcon />,
+      title: "Kontrak Sewa",
+      url: "/administrasi/kontrak",
+      icon: <FileTextIcon />,
+    },
+    {
+      title: "Pemeliharaan",
+      url: "/administrasi/pemeliharaan",
+      icon: <WrenchIcon />,
+    },
+    {
+      title: "Pengaduan",
+      url: "/administrasi/pengaduan",
+      icon: <WarningCircleIcon />,
+    },
+    {
+      title: "Inspeksi Hunian",
+      url: "/administrasi/inspeksi",
+      icon: <ClipboardIcon />,
+    },
+    {
+      title: "Laporan",
+      url: "/administrasi/laporan",
+      icon: <ChartBarIcon />,
     },
   ],
 
   navSecondary: [
     {
-      title: "User",
+      title: "Dokumen",
+      url: "/administrasi/dokumen",
+      icon: <FilePdfIcon />,
+    },
+    {
+      title: "Manajemen User",
       url: "/administrasi/manajemen-user",
       icon: <UsersIcon />,
     },
-
     {
       title: "Pengaturan",
       url: "/administrasi/pengaturan",
@@ -68,6 +116,7 @@ const data = {
     },
   ],
 }
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
