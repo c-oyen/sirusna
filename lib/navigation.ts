@@ -2,11 +2,11 @@ export type NavItem = { title: string; url: string }
 
 export const NAV_MAIN: NavItem[] = [
   { title: "Dasbor", url: "/administrasi" },
-  { title: "Data Rusun", url: "/administrasi/rusun" },
+  // { title: "Data Rusun", url: "/administrasi/rusun" },
   { title: "Pengajuan Rusun", url: "/administrasi/pengajuan" },
   { title: "Data Penghuni", url: "/administrasi/penghuni" },
   { title: "Unit Hunian", url: "/administrasi/unit" },
-  { title: "Tagihan & Transaksi", url: "/administrasi/transaksi" },
+  // { title: "Tagihan & Transaksi", url: "/administrasi/transaksi" },
   { title: "Kontrak Sewa", url: "/administrasi/kontrak" },
   { title: "Pemeliharaan", url: "/administrasi/pemeliharaan" },
   { title: "Pengaduan", url: "/administrasi/pengaduan" },
