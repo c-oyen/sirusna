@@ -1,33 +1,8 @@
 "use client"
 
 import * as React from "react"
-
-import {
-  HouseIcon as HomeIcon,
-  TrayIcon as InboxIcon,
-  FileTextIcon as FileTextIcon,
-  FolderIcon as FolderIcon,
-  PlusIcon as PlusIcon,
-  FolderPlusIcon as FolderPlusIcon,
-  CopyIcon as CopyIcon,
-  ScissorsIcon as ScissorsIcon,
-  ClipboardIcon as ClipboardPasteIcon,
-  TrashIcon as TrashIcon,
-  SquaresFourIcon as LayoutGridIcon,
-  ListIcon as ListIcon,
-  MagnifyingGlassPlusIcon as ZoomInIcon,
-  MagnifyingGlassMinusIcon as ZoomOutIcon,
-  UserIcon as UserIcon,
-  CreditCardIcon as CreditCardIcon,
-  GearIcon as SettingsIcon,
-  BellIcon as BellIcon,
-  QuestionIcon as HelpCircleIcon,
-  CalculatorIcon as CalculatorIcon,
-  CalendarIcon as CalendarIcon,
-  ImageIcon as ImageIcon,
-  CodeIcon as CodeIcon,
-  MagnifyingGlassIcon as SearchIcon,
-} from "@phosphor-icons/react"
+import { useRouter } from "next/navigation"
+import { MagnifyingGlassIcon } from "@phosphor-icons/react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -38,176 +13,114 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandShortcut,
   CommandSeparator,
 } from "@/components/ui/command"
-import { Kbd, KbdGroup } from "@/components/ui/kbd"
+import { unitLabelLengkap } from "@/lib/lookup"
+import { NAV_ALL } from "@/lib/navigation"
+import { useDb } from "@/lib/store"
+
+const BASE = "/administrasi"
 
 export function AdminSearch() {
+  const router = useRouter()
+  const db = useDb()
   const [open, setOpen] = React.useState(false)
-  // 1. Listen for CMD/CTRL + K to open the search modal
+
   React.useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
-        setOpen((open) => !open)
+        setOpen((o) => !o)
       }
     }
-
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
+    document.addEventListener("keydown", onKeyDown)
+    return () => document.removeEventListener("keydown", onKeyDown)
   }, [])
+
+  function go(href: string) {
+    setOpen(false)
+    router.push(href)
+  }
+
   return (
-    <div className="flex flex-col gap-4">
+    <>
       <Button
         onClick={() => setOpen(true)}
         variant="outline"
-        // className="w-[17svw] justify-start"
+        aria-label="Buka pencarian"
         className="relative h-9 w-full justify-start text-sm text-muted-foreground sm:w-64 lg:w-80"
       >
-        {/*<span> Cari...</span>
-        <KbdGroup>
-          <Kbd>Ctrl/CMD</Kbd>
-          <span>+</span>
-          <Kbd>K</Kbd>
-        </KbdGroup>*/}
-        <SearchIcon className="mr-2 h-4 w-4" />
+        <MagnifyingGlassIcon className="mr-2 h-4 w-4" />
         <span className="hidden lg:inline-flex">Pencarian...</span>
         <span className="inline-flex lg:hidden">Cari...</span>
-
-        {/* Absolute positioned keyboard hint on the right */}
-        <kbd className="pointer-events-none absolute top-1.5 right-1.5 hidden h-6 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-sm font-medium opacity-100 select-none sm:flex">
-          <span className="text-lg">⌘</span>K
+        <kbd className="pointer-events-none absolute top-1.5 right-1.5 hidden h-6 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium select-none sm:flex">
+          Ctrl K
         </kbd>
       </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog
+        open={open}
+        onOpenChange={setOpen}
+        title="Pencarian"
+        description="Cari halaman, penghuni, unit, atau pengajuan"
+      >
         <Command>
-          <CommandInput placeholder="Ketik sebuah perintah atau cari..." />
+          <CommandInput placeholder="Cari halaman, penghuni, unit, pengajuan…" />
           <CommandList>
-            <CommandGroup heading="Navigation">
-              <CommandItem>
-                <HomeIcon />
-                <span>Dasbor</span>
-                <CommandShortcut>⌘H</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <InboxIcon />
-                <span>Inbox</span>
-                <CommandShortcut>⌘I</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <FileTextIcon />
-                <span>Documents</span>
-                <CommandShortcut>⌘D</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <FolderIcon />
-                <span>Folders</span>
-                <CommandShortcut>⌘F</CommandShortcut>
-              </CommandItem>
+            <CommandEmpty>Tidak ada hasil.</CommandEmpty>
+            <CommandGroup heading="Halaman">
+              {NAV_ALL.map((n) => (
+                <CommandItem
+                  key={n.url}
+                  value={`halaman ${n.title}`}
+                  onSelect={() => go(n.url)}
+                >
+                  {n.title}
+                </CommandItem>
+              ))}
             </CommandGroup>
             <CommandSeparator />
-            <CommandGroup heading="Actions">
-              <CommandItem>
-                <PlusIcon />
-                <span>New File</span>
-                <CommandShortcut>⌘N</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <FolderPlusIcon />
-                <span>New Folder</span>
-                <CommandShortcut>⇧⌘N</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <CopyIcon />
-                <span>Copy</span>
-                <CommandShortcut>⌘C</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <ScissorsIcon />
-                <span>Cut</span>
-                <CommandShortcut>⌘X</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <ClipboardPasteIcon />
-                <span>Paste</span>
-                <CommandShortcut>⌘V</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <TrashIcon />
-                <span>Delete</span>
-                <CommandShortcut>⌫</CommandShortcut>
-              </CommandItem>
+            <CommandGroup heading="Penghuni">
+              {db.penghuni.map((p) => (
+                <CommandItem
+                  key={p.id}
+                  value={`penghuni ${p.nama} ${p.nik}`}
+                  onSelect={() => go(`${BASE}/penghuni`)}
+                >
+                  {p.nama}
+                  <span className="ml-auto text-xs text-muted-foreground">
+                    {p.nik}
+                  </span>
+                </CommandItem>
+              ))}
             </CommandGroup>
-            <CommandSeparator />
-            <CommandGroup heading="View">
-              <CommandItem>
-                <LayoutGridIcon />
-                <span>Grid View</span>
-              </CommandItem>
-              <CommandItem>
-                <ListIcon />
-                <span>List View</span>
-              </CommandItem>
-              <CommandItem>
-                <ZoomInIcon />
-                <span>Zoom In</span>
-                <CommandShortcut>⌘+</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <ZoomOutIcon />
-                <span>Zoom Out</span>
-                <CommandShortcut>⌘-</CommandShortcut>
-              </CommandItem>
+            <CommandGroup heading="Unit">
+              {db.unit.map((u) => (
+                <CommandItem
+                  key={u.id}
+                  value={`unit ${unitLabelLengkap(db, u.id)}`}
+                  onSelect={() => go(`${BASE}/unit`)}
+                >
+                  {unitLabelLengkap(db, u.id)}
+                </CommandItem>
+              ))}
             </CommandGroup>
-            <CommandSeparator />
-            <CommandGroup heading="Account">
-              <CommandItem>
-                <UserIcon />
-                <span>Profile</span>
-                <CommandShortcut>⌘P</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <CreditCardIcon />
-                <span>Billing</span>
-                <CommandShortcut>⌘B</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <SettingsIcon />
-                <span>Settings</span>
-                <CommandShortcut>⌘S</CommandShortcut>
-              </CommandItem>
-              <CommandItem>
-                <BellIcon />
-                <span>Notifications</span>
-              </CommandItem>
-              <CommandItem>
-                <HelpCircleIcon />
-                <span>Help & Support</span>
-              </CommandItem>
-            </CommandGroup>
-            <CommandSeparator />
-            <CommandGroup heading="Tools">
-              <CommandItem>
-                <CalculatorIcon />
-                <span>Calculator</span>
-              </CommandItem>
-              <CommandItem>
-                <CalendarIcon />
-                <span>Calendar</span>
-              </CommandItem>
-              <CommandItem>
-                <ImageIcon />
-                <span>Image Editor</span>
-              </CommandItem>
-              <CommandItem>
-                <CodeIcon />
-                <span>Code Editor</span>
-              </CommandItem>
+            <CommandGroup heading="Pengajuan">
+              {db.pengajuan.map((p) => (
+                <CommandItem
+                  key={p.id}
+                  value={`pengajuan ${p.nomor} ${p.nama}`}
+                  onSelect={() => go(`${BASE}/pengajuan`)}
+                >
+                  {p.nama}
+                  <span className="ml-auto text-xs text-muted-foreground">
+                    {p.nomor}
+                  </span>
+                </CommandItem>
+              ))}
             </CommandGroup>
           </CommandList>
         </Command>
       </CommandDialog>
-    </div>
+    </>
   )
 }

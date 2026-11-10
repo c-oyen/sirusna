@@ -1,90 +1,9 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { PlusIcon } from "@phosphor-icons/react/dist/ssr"
+import type { Metadata } from "next"
 
-export default function PenghuniPage() {
-  return (
-    <main className="space-y-6">
-      <header className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-        <div>
-          <h1 className="text-2xl font-bold">Data Penghuni</h1>
-          <p className="text-muted-foreground">
-            Kelola data penghuni rumah susun.
-          </p>
-        </div>
-        <Button>
-          <PlusIcon />
-          Tambah Penghuni
-        </Button>
-      </header>
+import { EntityPage } from "@/components/crud/entity-page"
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Daftar Penghuni</CardTitle>
-          <CardDescription>
-            Informasi penghuni yang terdaftar di SIRUSNA.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Input placeholder="Cari nama atau NIK..." />
-            <Select>
-              <SelectTrigger className="sm:w-48">
-                <SelectValue placeholder="Semua Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="aktif">Aktif</SelectItem>
-                <SelectItem value="nonaktif">Nonaktif</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+export const metadata: Metadata = { title: "Data Penghuni" }
 
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>No</TableHead>
-                <TableHead>NIK</TableHead>
-                <TableHead>Nama Lengkap</TableHead>
-                <TableHead>Jenis Kelamin</TableHead>
-                <TableHead>Telepon</TableHead>
-                <TableHead>Rusun</TableHead>
-                <TableHead>Unit</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Aksi</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={9} className="h-24 text-center">
-                  Belum ada data penghuni.
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    </main>
-  )
+export default function Page() {
+  return <EntityPage entity="penghuni" />
 }
